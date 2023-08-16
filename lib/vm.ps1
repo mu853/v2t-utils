@@ -11,7 +11,9 @@ function ExportVmList($path, $output_path){
         $network = ""
         if ( $vm.Obj -is [array] ) {
             $ips = ( $vm.Obj[1].LST.S | Select-String -NotMatch fe80 | Select-String -NotMatch "^169.254" ) -Join ":"
-            $network = $vm.Obj.LST.Obj.MS.S[0].'#text' -Join ":"
+            if($vm.Obj[0].LST){
+                $network = $vm.Obj[0].LST.Obj.MS.S[0].'#text' -Join ":"
+            }
         }
         [PSCustomObject]@{
             moref = $vm.S[0].'#text'

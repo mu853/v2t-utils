@@ -33,7 +33,13 @@ function ExportDfw($path, $output_path){
             }
             if($rule.services.service){
                 $service = ($rule.services.service | %{
-                    "{0}({1}:{2})" -F $_.name, $_.value, $_.type
+                    if ($_.type) {
+                        "{0}({1}:{2})" -F $_.name, $_.value, $_.type
+                    } elseif ($_.protocolName -eq "ICMP") {
+                        "ICMP"
+                    } else {
+                        "{0}/{1}" -F ($_.destinationPort -Join ":"), $_.protocolName
+                    }
                 }) -Join "`n"
             }
             if($rule.appliedToList.appliedTo){

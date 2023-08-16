@@ -20,6 +20,7 @@ function Create-CsvFromXML() {
 
     $edge_list = EdgeList($path)
     ExportEdgeList $edge_list $output_path
+    ExportDlrList $edge_list $output_path
     ExportOspf $edge_list $output_path
     ExportLb $edge_list $output_path
     ExportGwfw $edge_list $output_path

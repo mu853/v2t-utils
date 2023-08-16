@@ -6,10 +6,20 @@ function ExportDhcp($edge_list, $output_path){
     }
     $t = $dhcp_list | %{
         $edge_name = $_.ParentNode.ParentNode.name
-        $_.ipPools.ipPool | %{
-            $obj = $_ | select edge, poolId, ipRange, defaultGateway, leaseTime, autoConfigureDNS, allowHugeRange
-            $obj.edge = $edge_name
-            $obj
+        if ($_.ipPools) {
+            $_.ipPools.ipPool | %{
+                $obj = $_ | select edge, poolId, ipRange, defaultGateway, leaseTime, autoConfigureDNS, allowHugeRange, relayServer, vnicIndex, giAddress
+                $obj.edge = $edge_name
+                $obj
+            }
+        } elseif ($_.relay) {
+            $relay = $_.relay
+            $relay.relayAgents.relayAgent | %{
+                $obj = $_ | select edge, poolId, ipRange, defaultGateway, leaseTime, autoConfigureDNS, allowHugeRange, relayServer, vnicIndex, giAddress
+                $obj.edge = $edge_name
+                $obj.relayServer = $relay.relayServer.ipAddress -Join "`n"
+                $obj
+            }
         }
     }
     $t | Export-Csv -Encoding $global:encoding -NoTypeInformation -Path (Join-Path $output_path "dhcp.csv")
