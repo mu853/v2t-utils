@@ -32,4 +32,4 @@ $
 ```
 
 ## csv files to Excel
-output csv files can be collected in an Excel bool with [pwsh-utils](https://github.com/mu853/pwsh-utils)
+output csv files can be collected in an Excel bool with [create_excel_from_csv.ps1](https://github.com/mu853/pwsh-utils/tree/main#create_excel_from_csvps1)
